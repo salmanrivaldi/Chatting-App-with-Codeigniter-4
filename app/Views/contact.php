@@ -1,0 +1,28 @@
+<?= $this->extend('templates/main') ?>
+
+<?= $this->section('content') ?>
+
+<div class="wrapper">
+  <header>
+    <div class="content">
+      <img src="<?= base_url('assets/images/default.png'); ?>" />
+      <div class="details">
+        <span>Salman Rivaldi</span>
+        <p>Online</p>
+      </div>
+    </div>
+    <a href="#" class="logout">Logout</a>
+  </header>
+  <section class="users">
+    <div class="search">
+      <span class="text">Select an user to start chat</span>
+      <input type="text" placeholder="Enter name to search...">
+      <button><i class="fas fa-search"></i></button>
+    </div>
+    <div class="users-list">
+    </div>
+  </section>
+</div>
+
+
+<?= $this->endSection() ?>
