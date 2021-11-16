@@ -1,62 +1,51 @@
-const form = document.querySelector("form"),
-  emailField = form.querySelector(".email"),
-  emailInput = emailField.querySelector("input"),
-  passwordField = form.querySelector(".password"),
-  passwordInput = passwordField.querySelector("input");
+function previewImg() {
+  const inputImg = document.querySelector("#file-input"),
+    imgPreview = document.querySelector("#img-preview");
 
-form.onsubmit = (e) => {
-  e.preventDefault(); //preventing from form submitting
-  //if email and password is blank then add shake class in it else call specified function
-  emailInput.value == "" ? emailField.classList.add("shake", "error") : checkEmail();
-  passwordInput.value == "" ? passwordField.classList.add("shake", "error") : checkPass();
+  const fileReader = new FileReader();
+  fileReader.readAsDataURL(inputImg.files[0]);
 
-  setTimeout(() => {
-    //remove shake class after 500ms
-    emailField.classList.remove("shake");
-    passwordField.classList.remove("shake");
-  }, 500);
+  fileReader.onload = (e) => (imgPreview.src = e.target.result);
+}
 
-  emailInput.onkeyup = () => {
-    checkEmail();
-  }; //calling checkEmail function on email input keyup
-  passwordInput.onkeyup = () => {
-    checkPass();
-  }; //calling checkPassword function on pass input keyup
+$(document).ready(function () {
+  $("form.login").submit(function (e) {
+    e.preventDefault();
 
+    $.ajax({
+      type: "post",
+      url: "/users/auth_login",
+      data: $(this).serialize(),
+      dataType: "json",
+      success: function (response) {
+        if (response.status) {
+          window.location = "/contact";
+        } else {
+          $.each(response.errors, function (key, value) {
+            let input = `[name = ${key}]`;
 
-  function checkEmail() {
-    //checkEmail function
-    let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/; //pattern for validate email
-    if (!emailInput.value.match(pattern)) {
-      //if pattern not matched then add error and remove valid class
-      emailField.classList.add("error");
-      emailField.classList.remove("valid");
-      let errorTxt = emailField.querySelector(".error-txt");
-      //if email value is not empty then show please enter valid email else show Email can't be blank
-      emailInput.value != "" ? (errorTxt.innerText = "Enter a valid email address") : (errorTxt.innerText = "Email can't be blank");
-    } else {
-      //if pattern matched then remove error and add valid class
-      emailField.classList.remove("error");
-      emailField.classList.add("valid");
-    }
-  }
+            if (value != "") {
+              $(input).parents(".field").addClass("shake error");
+              $(input).parents(".field").find(".error-txt").text(value);
 
-  function checkPass() {
-    //checkPass function
-    if (passwordInput.value == "") {
-      //if pass is empty then add error and remove valid class
-      passwordField.classList.add("error");
-      passwordField.classList.remove("valid");
-    } else {
-      //if pass is empty then remove error and add valid class
-      passwordField.classList.remove("error");
-      passwordField.classList.add("valid");
-    }
-  }
+              //remove shake class after 500ms
+              setTimeout(() => {
+                $(input).parents(".field").removeClass("shake");
+              }, 500);
 
-
-  //if emailField and passwordField doesn't contains error class that mean user filled details properly
-  if (!emailField.classList.contains("error") && !passwordField.classList.contains("error")) {
-    window.location.href = form.getAttribute("action"); //redirecting user to the specified url which is inside action attribute of form tag
-  }
-};
+              $(input).keyup(function (e) {
+                if ($(input).val() == "") {
+                  $(input).parents(".field").addClass("error");
+                  $(input).parents(".field").removeClass("valid");
+                } else {
+                  $(input).parents(".field").removeClass("error");
+                  $(input).parents(".field").addClass("valid");
+                }
+              });
+            }
+          });
+        }
+      },
+    });
+  });
+});

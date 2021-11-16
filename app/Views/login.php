@@ -6,10 +6,10 @@
   <header>
     <h1>Login Form</h1>
   </header>
-  <form action="#">
+  <form class="login">
     <div class="field email">
       <div class="input-area">
-        <input type="text" placeholder="Email Address">
+        <input type="text" name="email" placeholder="Email Address">
         <i class="icon fas fa-envelope"></i>
         <i class="error error-icon fas fa-exclamation-circle"></i>
       </div>
@@ -17,7 +17,7 @@
     </div>
     <div class="field password">
       <div class="input-area">
-        <input type="password" placeholder="Password">
+        <input type="password" name="password" placeholder="Password">
         <i class="icon fas fa-lock"></i>
         <i class="eye-icon fas fa-eye"></i>
         <i class="error error-icon fas fa-exclamation-circle"></i>

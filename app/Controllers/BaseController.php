@@ -2,11 +2,14 @@
 
 namespace App\Controllers;
 
+use App\Models\MessagesModel;
+use App\Models\UsersModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -48,5 +51,9 @@ class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = \Config\Services::session();
+        session();
+        $this->validation = Services::validation();
+        $this->userModel = new UsersModel();
+        $this->messageModel = new MessagesModel();
     }
 }

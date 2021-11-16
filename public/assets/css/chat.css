@@ -69,6 +69,14 @@ body {
   font-size: 13px;
 }
 
+.wrapper header .details p.offline {
+  color: #91a7ff;
+}
+
+.chat-box::-webkit-scrollbar {
+  width: 0px;
+}
+
 .chat-box {
   position: relative;
   min-height: 400px;
@@ -83,6 +91,7 @@ body {
   position: absolute;
   top: 45%;
   left: 50%;
+  color: #bfbfbf;
   width: calc(100% - 50px);
   text-align: center;
   transform: translate(-50%, -50%);
@@ -130,7 +139,7 @@ body {
 }
 
 .incoming .details p {
-  background: #fff;
+  background: #e3e9ff;
   color: #333;
   border-radius: 18px 18px 18px 0;
 }
@@ -146,12 +155,15 @@ body {
   width: calc(100% - 58px);
   font-size: 16px;
   padding: 0 13px;
-  border: 1px solid #a2b1f0;
+  border: 1px solid #bfbfbf;
+  border-bottom-width: 2px;
+  caret-color: #5372f0;
+  color: #333;
   outline: none;
   border-radius: 5px 0 0 5px;
 }
 .typing-area input::placeholder {
-  color: #a2b1f0;
+  color: #bfbfbf;
 }
 
 .typing-area button {
@@ -159,7 +171,7 @@ body {
   width: 55px;
   border: none;
   outline: none;
-  background: #5372f0;
+  background: #708dff;
   font-size: 19px;
   cursor: pointer;
   pointer-events: none;
@@ -168,6 +180,7 @@ body {
 }
 
 .typing-area button.active {
+  background-color: #5372f0;
   opacity: 1;
   pointer-events: auto;
 }

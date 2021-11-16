@@ -1,63 +1,53 @@
-const form = document.querySelector(".typing-area"),
-incoming_id = form.querySelector(".incoming_id").value,
-inputField = form.querySelector(".input-field"),
-sendBtn = form.querySelector("button"),
-chatBox = document.querySelector(".chat-box");
-
-form.onsubmit = (e)=>{
-    e.preventDefault();
-}
-
-inputField.focus();
-inputField.onkeyup = ()=>{
-    if(inputField.value != ""){
-        sendBtn.classList.add("active");
-    }else{
-        sendBtn.classList.remove("active");
-    }
-}
-
-sendBtn.onclick = ()=>{
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "php/insert-chat.php", true);
-    xhr.onload = ()=>{
-      if(xhr.readyState === XMLHttpRequest.DONE){
-          if(xhr.status === 200){
-              inputField.value = "";
-              scrollToBottom();
-          }
-      }
-    }
-    let formData = new FormData(form);
-    xhr.send(formData);
-}
-chatBox.onmouseenter = ()=>{
-    chatBox.classList.add("active");
-}
-
-chatBox.onmouseleave = ()=>{
-    chatBox.classList.remove("active");
-}
-
-setInterval(() =>{
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "php/get-chat.php", true);
-    xhr.onload = ()=>{
-      if(xhr.readyState === XMLHttpRequest.DONE){
-          if(xhr.status === 200){
-            let data = xhr.response;
-            chatBox.innerHTML = data;
-            if(!chatBox.classList.contains("active")){
-                scrollToBottom();
-              }
-          }
-      }
-    }
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.send("incoming_id="+incoming_id);
+$(document).ready(function () {
+  setInterval(() =>{
+    getChat();
 }, 500);
 
-function scrollToBottom(){
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
+  $(".input-field").focus();
+  $(".input-field").keyup(function (e) {
+    if ($(".input-field").val() != "") {
+      $("button").addClass("active");
+    } else {
+      $("button").removeClass("active");
+    }
+  });
+
+  $("form.typing-area").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "post",
+      url: "/messages/send_chat",
+      data: $(this).serialize(),
+      success: function (response) {
+        $(".input-field").val("");
+        $("button").removeClass("active");
+  $(".input-field").focus();
+      },
+    });
+  });
   
+  $(".chat-box").mouseenter(function () {
+    $(".chat-box").addClass("active");
+  });
+
+  $(".chat-box").mouseleave(function () {
+    $(".chat-box").removeClass("active");
+  });
+
+  function getChat() {
+    $.ajax({
+      type: "post",
+      url: "/messages/get_chat",
+      dataType: "json",
+      data: {
+        receiver_id: $(".receiver_id").val(),
+      },
+      success: function (response) {
+        $(".chat-box").html(response);
+        if (!$(".chat-box").hasClass("active")) {
+          $('.chat-box')[0].scrollTop = ($('.chat-box')[0].scrollHeight);
+        }
+      },
+    });
+  }
+});

@@ -34,8 +34,9 @@ $routes->setAutoRoute(true);
 // $routes->get('/', 'Home::index');
 $routes->get('/', 'Users::index');
 $routes->get('/register', 'Users::register');
-$routes->get('/contact', 'Users::contact');
-$routes->get('/chat', 'Users::chat');
+$routes->get('/logout', 'Users::logout');
+$routes->get('/contact', 'Messages::contact');
+$routes->get('/chat/(:num)', 'Messages::chat/$1');
 
 /*
  * --------------------------------------------------------------------
